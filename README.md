@@ -12,7 +12,7 @@ Scrapes News from the world of Cyber Security, Hacking and related topics.
   ```
   git clone https://github.com/codeandgyan/news-scraper.git
   ```
-- Go to the new-scraper folder and install the dependencies
+- Go to the news-scraper folder and install the dependencies
   ```
   cd news-scraper
   pnpm install
