@@ -33,6 +33,11 @@ Scrapes News from the world of Cyber Security, Hacking and related topics and se
 
 - Download and Install Discord App from Google Playstore or App store
 - Create a Discord Account, if you already don't have
-- Join _Cyber Security News Server_ Discord Server by clicking this link: https://discord.gg/Hx6DJxYPtc
+- Join _Cyber Security News Server_ Discord Server by clicking this link: https://discord.gg/Hx6DJxYPtc (Upto 5 allowed)
 - You'll receive latest cyber security news updates on `#news-feed` channel
 - Turn on the notifications on `#news-feed` channel to receive instant news on your mobile
+
+# More Info
+
+- Replit Service: https://e5b4ad78-7d23-4bea-be61-b0b7f06118ed-00-2f9cmgqgobk7g.pike.replit.dev/
+- UptimeRobot: https://stats.uptimerobot.com/CyL0KnPHgs
