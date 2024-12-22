@@ -13,9 +13,17 @@ Scrapes News from the world of Cyber Security, Hacking and related topics and se
   git clone https://github.com/codeandgyan/news-scraper.git
   ```
 - Go to the news-scraper folder and install the dependencies
+
   ```
   cd news-scraper
   pnpm install
+  ```
+
+- Add a `.env` file at the root folder
+- You would need a valid discord token and your discord channelId to make the discord bot work
+  ```
+  DISCORD_TOKEN=<YourDiscordToken>
+  NEWS_FEED_CHANNEL_ID=<YourChannelId>
   ```
 - Run the server in dev mode (locally)
 
@@ -24,12 +32,11 @@ Scrapes News from the world of Cyber Security, Hacking and related topics and se
   ```
 
 - Run the server in prod mode (deployed)
-
   ```
   pnpm discord-prod
   ```
 
-# Steps to receive latest cyber security news feed on your mobile using discord server
+# Receive latest Cyber Security News feed on your mobile using discord server
 
 - Download and Install Discord App from Google Playstore or App store
 - Create a Discord Account, if you already don't have
