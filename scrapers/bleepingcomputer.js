@@ -1,5 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const { convertToDateTime } = require("../common/utils");
 
 const url = "https://www.bleepingcomputer.com/";
 
@@ -50,11 +51,12 @@ const scrapeNews = async (pageNumber = 1) => {
           author,
           date,
           time,
+          dateTime: convertToDateTime(date, time),
         };
       })
       .filter((item) => item.category !== "Deals");
 
-    return articles;
+    return articles.sort((a, b) => a.dateTime - b.dateTime);
   } catch (error) {
     console.error("Error scraping news:", error);
     return [];
