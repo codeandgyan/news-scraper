@@ -1,13 +1,13 @@
 {
   "name": "news-scraper",
   "version": "1.0.0",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server-dev": "node --watch server.js",
     "server-prod": "node server.js",
-    "discord-dev": "node --watch bot.js",
-    "discord-prod": "node bot.js"
+    "discord-dev": "node --watch index.js",
+    "discord-prod": "node index.js"
   },
   "keywords": [],
   "author": "",
