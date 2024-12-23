@@ -4,6 +4,8 @@ const cron = require("cron");
 const keepAlive = require("./server.js");
 const { sendNews } = require("./scrapers/news");
 
+const JOB_INTERVAL = process.env.INTERVAL || 20;
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -25,7 +27,7 @@ const sendFeed = async () => {
 client.once("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   // Cron job
-  const job = new cron.CronJob("0 */20 * * * *", sendFeed); // Every 20 minutes
+  const job = new cron.CronJob(`0 */${JOB_INTERVAL} * * * *`, sendFeed); // Every 20 minutes
   // send the feed for the first time
   (async () => {
     await sendFeed();
