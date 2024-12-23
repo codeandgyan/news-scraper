@@ -46,5 +46,5 @@ Scrapes News from the world of Cyber Security, Hacking and related topics and se
 
 # More Info
 
-- Replit Service: https://e5b4ad78-7d23-4bea-be61-b0b7f06118ed-00-2f9cmgqgobk7g.pike.replit.dev/
-- UptimeRobot: https://stats.uptimerobot.com/CyL0KnPHgs
+- Running on: https://dashboard.katabump.com/dashboard
+- Control on: https://control.katabump.com/auth/login

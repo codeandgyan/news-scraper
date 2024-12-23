@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits } = require("discord.js");
 const cron = require("cron");
 const keepAlive = require("./server.js");
 const { sendNews } = require("./scrapers/news");
+const { getFormattedDateTime } = require("./common/utils.js");
 
 const JOB_INTERVAL = process.env.INTERVAL || 20;
 
@@ -19,7 +20,7 @@ const client = new Client({
 // });
 
 const sendFeed = async () => {
-  console.log("sending news feed...");
+  console.log(`${getFormattedDateTime()} >> `, "Polling for news feed...");
   const channel = await client.channels.fetch(process.env.NEWS_FEED_CHANNEL_ID);
   await sendNews(channel);
 };
