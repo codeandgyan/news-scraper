@@ -1,5 +1,6 @@
 # news-scraper
 Scrapes News from the world of Cyber Security, Hacking and related topics and sends the feed via a discord bot
+![image](https://github.com/user-attachments/assets/a3d3cb41-781d-4af0-9cb4-1709d29a05d0)
 
 # Steps to setup and run the app
 - Install pnpm CLI, if you don't already have in your machine
