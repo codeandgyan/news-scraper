@@ -1,6 +1,6 @@
 function convertToDateTime(dateString, timeString) {
   // Combine the date and time strings
-  const dateTimeString = `${dateString} ${timeString}`;
+  const dateTimeString = `${dateString} ${timeString}`.trim();
 
   // Parse the combined string into a Date object
   const dateTime = new Date(dateTimeString);

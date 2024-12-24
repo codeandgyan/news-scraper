@@ -58,7 +58,7 @@ const scrapeNews = async (pageNumber = 1) => {
 
     return articles.sort((a, b) => a.dateTime - b.dateTime);
   } catch (error) {
-    console.error("Error scraping news:", error);
+    console.error("Error scraping bleepingcomputer:", error);
     return [];
   }
 };

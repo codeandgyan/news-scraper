@@ -1,7 +1,7 @@
 const { scrapeBleepingComputer } = require("./bleepingcomputer");
 const { EmbedBuilder } = require("discord.js");
-
-const newsCache = new Set();
+// const { scrapeCyberSecurityNews } = require("./cybersecuritynews");
+const { scrapeGBHackers } = require("./gbhackers");
 
 const getSentMessages = async (channel, limit) => {
   try {
@@ -17,23 +17,12 @@ const getSentMessages = async (channel, limit) => {
 };
 
 async function sendNews(channel) {
-  const articles = await scrapeBleepingComputer(1);
+  const bleepingcomputerArticles = await scrapeBleepingComputer(1);
+  //   const cybersecuritynewsArticles = await scrapeCyberSecurityNews(1);
+  const gbhackersArticles = await scrapeGBHackers(1);
+  const articles = [...bleepingcomputerArticles, ...gbhackersArticles];
   const dispatchedArticles = await getSentMessages(channel, 100);
-  //   console.log("Dispatched Articles -->", dispatchedArticles);
   for (const article of articles) {
-    // // const news = `${article.link}`;
-    // const news = `
-    //     ${article.category}: ${article.headline} \n
-    //     ${article.link} \n
-    //     @everyone
-    // `.trim();
-    // if (!dispatchedArticles.has(news)) {
-    //   // Check if the news is already sent
-    // //   await channel.send(news); // Send the new news
-    //   console.log(`Sent news: ${news}`);
-    //   break; // Send one news item at a time
-    // }
-
     const embeddedNews = new EmbedBuilder()
       .setTitle(article.headline)
       .setAuthor({
