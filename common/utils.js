@@ -44,7 +44,33 @@ function getFormattedDateTime() {
   return `${month} ${day}, ${year} ${hourIn12Format}:${minutes}:${seconds} ${ampm}`;
 }
 
+function formatTextToUrl(text) {
+  return text
+    .toLowerCase() // Convert to lowercase
+    .replace(/[^a-z0-9\s]/g, "-") // Replace any non-alphanumeric character (except space) with '-'
+    .replace(/\s+/g, "-") // Replace spaces (one or more) with '-'
+    .replace(/-+$/g, ""); // Remove trailing hyphens if any
+}
+
+// Function to validate the keyword
+function isValidKeyword(keyword) {
+  if (!keyword || typeof keyword !== "string" || keyword.trim().length < 3) {
+    return false;
+  }
+
+  const alphanumericRegex = /[a-zA-Z0-9]/;
+  const symbolOnlyRegex = /^[^a-zA-Z0-9]*$/;
+
+  if (!alphanumericRegex.test(keyword) || symbolOnlyRegex.test(keyword)) {
+    return false;
+  }
+
+  return true;
+}
+
 module.exports = {
   convertToDateTime,
   getFormattedDateTime,
+  formatTextToUrl,
+  isValidKeyword,
 };
