@@ -15,8 +15,8 @@ async function generateMarkdownArticle(keyword) {
     const author = generateSlug(2, {
       format: "title",
       categories: {
-        adjective: ["personality"],
-        noun: ["people", "technology"],
+        adjective: ["personality",],
+        noun: ["people", "technology", "media"],
       },
     });
     const dateTime = getFormattedDateTime();

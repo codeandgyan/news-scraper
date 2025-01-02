@@ -19,11 +19,15 @@ async function writeABlog(keyword) {
     dateTime,
     imageUrl
   );
-  console.log("Article published to:", articleUrl);
+  return articleUrl;
 }
 
-// Example usage
-(async () => {
-  const keyword = "SSL Stripping";
-  await writeABlog(keyword);
-})();
+// // Example usage
+// (async () => {
+//   const keyword = "SSL Stripping";
+//   await writeABlog(keyword);
+// })();
+
+module.exports = {
+  writeABlog,
+};

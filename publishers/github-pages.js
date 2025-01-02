@@ -60,17 +60,15 @@ async function publishArticle(
         },
       }
     );
-
-    console.log(`Article published: ${response.data.content.html_url}`);
     const pageUrl = `https://${username}.github.io/${repo}/${
       filePath.split(".")[0]
     }`;
-    console.log(`GitHub Pages URL: ${pageUrl}`);
+    console.log(`Article Published on: ${pageUrl}`);
     await updateMainPage(pageUrl, title, summary, author, dateTime, imageUrl);
     return pageUrl;
   } catch (error) {
     console.error(
-      "Error publishing article:",
+      `Error publishing article "${title}}":`,
       error.response?.data || error.message
     );
   }
@@ -102,7 +100,7 @@ async function updateMainPage(
     const newContent = `| <img src="${imageUrl}" alt="${articleTitle}"> | [${articleTitle}](${articleUrl}) | ${summary} | ${dateTime} | ${author} |`;
 
     // Append the new article content to current content
-    const updatedContent = `${currentContent}${newContent}`;
+    const updatedContent = `${currentContent}${newContent}\n`;
 
     // Encode the updated content
     const encodedContent = Buffer.from(updatedContent).toString("base64");
@@ -122,8 +120,6 @@ async function updateMainPage(
         },
       }
     );
-
-    console.log(`Main page updated with link: ${articleUrl}`);
   } catch (error) {
     console.error(
       "Error updating main page:",
