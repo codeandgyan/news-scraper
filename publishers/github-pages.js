@@ -3,11 +3,11 @@ const https = require("https");
 const { formatTextToUrl, getFormattedDateTime } = require("../common/utils");
 require("dotenv").config();
 
-const githubToken = process.env.GITHUB_TOKEN;
-const username = process.env.GITHUB_USERNAME; // Your GitHub username
-const repo = process.env.GITHUB_REPO; // Your GitHub repository name
+const githubToken = process.env.GITHUB_TOKEN; // Use Your GitHub token
+const username = process.env.GITHUB_USERNAME; // Use Your GitHub username
+const repo = process.env.GITHUB_REPO; // Use Your GitHub repository name
 const branch = process.env.GITHUB_BRANCH; // Branch for GitHub Pages
-const mainPageReadmePath = process.env.GITHUB_README_PATH; // Path to the main page
+const mainPageReadmePath = process.env.GITHUB_README_PATH; // Path to the main page (eg. README.md)
 
 const axiosInstance = axios.create({
   httpsAgent: new https.Agent({
@@ -64,7 +64,14 @@ async function publishArticle(
       filePath.split(".")[0]
     }`;
     console.log(`Article Published on: ${pageUrl}`);
-    await updateMainPage(pageUrl, title, summary, author, dateTime, imageUrl);
+    await addArticleToHomePage(
+      pageUrl,
+      title,
+      summary,
+      author,
+      dateTime,
+      imageUrl
+    );
     return pageUrl;
   } catch (error) {
     console.error(
@@ -74,7 +81,7 @@ async function publishArticle(
   }
 }
 
-async function updateMainPage(
+async function addArticleToHomePage(
   articleUrl,
   articleTitle,
   summary,
@@ -85,7 +92,6 @@ async function updateMainPage(
   const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${mainPageReadmePath}`;
 
   try {
-    // Fetch the current content of the main page
     const { data } = await axiosInstance.get(apiUrl, {
       headers: {
         Authorization: `token ${githubToken}`,
@@ -97,7 +103,15 @@ async function updateMainPage(
       "utf-8"
     );
 
-    const newContent = `| <img src="${imageUrl}" alt="${articleTitle}"> | [${articleTitle}](${articleUrl}) | ${summary} | ${dateTime} | ${author} |`;
+    const newContent = `| <span style='font-size: 1.25rem; line-height: normal'>🔖</span> | <a href='${articleUrl}' style='font-size: 1.25rem; line-height: normal'>${articleTitle}</a> |
+|-------|:-----------------------|
+|       | <img class='image' src='${imageUrl}' alt='${articleTitle}' width='300'> |
+|       | <span class='summary'>${summary}</span> |
+|       | <span class='publication' style='font-size: 0.938rem; opacity: 0.5; line-height: normal; font-weight: 500'><span class='author'>${author}</span><br><span class='date'>${dateTime}</span><br><span>• • •</span><br><em class='category' style='font-size: small'>Powered by AI</em><sup> ⚙️</sup></span>   |
+
+---
+
+`;
 
     // Append the new article content to current content
     const updatedContent = `${currentContent}${newContent}\n`;
@@ -105,13 +119,13 @@ async function updateMainPage(
     // Encode the updated content
     const encodedContent = Buffer.from(updatedContent).toString("base64");
 
-    // Update the main page
+    // Update the articles home page (holding a list of articles)
     await axiosInstance.put(
       apiUrl,
       {
         message: `Adding article: ${articleTitle}`, // Commit message
-        content: encodedContent, // New content
-        sha: data.sha, // Required to update the file
+        content: encodedContent,
+        sha: data.sha,
         branch,
       },
       {

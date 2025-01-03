@@ -3,7 +3,7 @@ require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { searchImageUrl } = require("./image-url-lookup");
 const { generateSlug } = require("random-word-slugs");
-const { getFormattedDateTime } = require("../common/utils");
+const { getFormattedDateTime, getNewSlug } = require("../common/utils");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -12,18 +12,12 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 async function generateMarkdownArticle(keyword) {
   try {
     const imageUrl = await searchImageUrl(keyword);
-    const author = generateSlug(2, {
-      format: "title",
-      categories: {
-        adjective: ["personality",],
-        noun: ["people", "technology", "media"],
-      },
-    });
+    const author = getNewSlug("Bot");
     const dateTime = getFormattedDateTime();
     // System and user context for the article
     const systemContext = `
       You are a cybersecurity and hacking expert who explains concepts in an engaging way.
-      You create markdown articles that break down complex topics into beginner-friendly explanations.
+      You create markdown articles that break down complex topics into beginner-friendly technical explanations.
       Articles include a title, summary, description, use cases, and case studies, presented professionally.
       `;
 
@@ -39,7 +33,7 @@ async function generateMarkdownArticle(keyword) {
       3. ***Date***: *${dateTime}*\n
       4. ![${keyword}](${imageUrl})
       5. ## Summary: 4-5 lines summarizing the article in around 25 words.
-      6. ## Sections (upto N Sections) : A 3-5 minute read breaking down the concept with use cases, applications, a short case study, and any necessary details to trigger interest.
+      6. ## Sections (up to N Sections) : A 3-5 minute read breaking down the concept with use cases, applications, a short case study, and any necessary details to trigger interest.
       Ensure the formatting is professional with paragraphs, bullet points, and other necessary elements.
       `;
 

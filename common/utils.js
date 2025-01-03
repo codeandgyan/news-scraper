@@ -1,3 +1,5 @@
+const { generateSlug } = require("random-word-slugs");
+
 function convertToDateTime(dateString, timeString) {
   // Combine the date and time strings
   const dateTimeString = `${dateString} ${timeString}`.trim();
@@ -68,9 +70,28 @@ function isValidKeyword(keyword) {
   return true;
 }
 
+function getNewSlug(suffix) {
+  const slug = generateSlug(2, {
+    format: "title",
+    categories: {
+      adjective: ["personality", "color", "sounds", "shapes", "appearance"],
+      noun: [
+        "people",
+        "technology",
+        "media",
+        "science",
+        "business",
+        "profession",
+      ],
+    },
+  });
+  return suffix ? `${slug} ${suffix}` : slug;
+}
+
 module.exports = {
   convertToDateTime,
   getFormattedDateTime,
   formatTextToUrl,
   isValidKeyword,
+  getNewSlug,
 };
