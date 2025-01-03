@@ -46,7 +46,7 @@ client.on("messageCreate", async (message) => {
     if (message?.author?.bot) return;
     if (
       message?.channelId === process.env.DISCORD_TOPIC_LIST_CHANNEL_ID &&
-      message?.author?.username === process.env.DISORD_ADMIN_USERNAME
+      message?.author?.username === process.env.DISCORD_ADMIN_USERNAME
     ) {
       const keyword = message?.content;
       if (!isValidKeyword(keyword)) {

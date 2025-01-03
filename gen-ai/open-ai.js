@@ -1,4 +1,3 @@
-// Import necessary packages
 const OpenAI = require("openai");
 require("dotenv").config();
 
@@ -11,31 +10,26 @@ async function generateMarkdownArticle(keyword) {
   try {
     // System and user context for the article
     const systemContext = `
-    You are a cybersecurity and hacking expert who explains concepts in an engaging way.
-    You create markdown articles that break down complex topics into beginner-friendly explanations.
-    Articles include a title, summary, description, use cases, and case studies, presented professionally.
-    `;
+      You are a cybersecurity and hacking expert who explains concepts in an engaging way.
+      You create markdown articles that break down complex topics into beginner-friendly technical explanations.
+      Articles include a title, summary, description, use cases, and case studies, presented professionally.
+      `;
 
     const userPrompt = `
-    The user has provided the keyword: ${keyword}.
-    If the keyword is not related to cybersecurity, hacking, or privacy, respond with the following:
-    "INVALID KEYWORD"
-
-    Otherwise, write a markdown article following this structure:
-
-    1. **Title**: An intriguing title, up to 10 words.
-    2. **Summary**: 4-5 lines summarizing the article in around 25 words.
-    3. **Description**: A 3-5 minute read breaking down the concept with use cases, applications, a short case study, and any necessary details to trigger interest.
-    Ensure the formatting is professional with paragraphs, bullet points, and other necessary elements.
-    `;
-
-    // Call OpenAI API to generate the article
-    // const response = await openai.createCompletion({
-    //   model: "text-davinci-003",
-    //   prompt: `${systemContext}\n${userPrompt}`,
-    //   max_tokens: 1000,
-    //   temperature: 0.7,
-    // });
+      The user has provided the keyword: ${keyword}.
+      If the keyword is not related to cybersecurity, hacking, or privacy, respond with the following:
+      "INVALID KEYWORD"
+  
+      Otherwise, write a markdown article following this structure:
+  
+      1. # An intriguing title, up to 10 words.
+      2. ***Author***: *${author}*\n
+      3. ***Date***: *${dateTime}*\n
+      4. ![${keyword}](${imageUrl})
+      5. ## Summary: 4-5 lines summarizing the article in around 25 words.
+      6. ## Sections (up to N Sections) : A 3-5 minute read breaking down the concept with use cases, applications, a short case study, and any necessary details to trigger interest.
+      Ensure the formatting is professional with paragraphs, bullet points, and other necessary elements.
+      `;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -47,7 +41,6 @@ async function generateMarkdownArticle(keyword) {
     });
 
     // Extract and return the generated content
-    // const generatedMarkdown = response.data.choices[0].text.trim();
     const generatedMarkdown = response.choices[0].message.trim();
 
     // Check if the response indicates an invalid keyword
