@@ -3,7 +3,7 @@ function convertToDateTime(dateString, timeString) {
   const dateTimeString = `${dateString} ${timeString}`.trim();
 
   // Parse the combined string into a Date object
-  const dateTime = new Date(dateTimeString);
+  const dateTime = dateTimeString ? new Date(dateTimeString) : new Date();
 
   // Return the Date object
   return dateTime;

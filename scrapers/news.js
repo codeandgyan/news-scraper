@@ -27,21 +27,20 @@ async function sendNews(channel) {
   ];
   const dispatchedArticles = await getSentMessages(channel, 100);
   for (const article of articles) {
-    const embeddedNews = new EmbedBuilder()
-      .setTitle(article.headline)
-      .setAuthor({
-        name: `${article.category}`,
-      })
-      .setImage(article.imageUrl)
-      //   .setThumbnail(article.imageUrl)
-      .setDescription(article.summary)
-      .setURL(article.link)
-      //   .setTimestamp(new Date().toISOString())
-      .setFooter({
-        text: `by ${article.author}\n${article.date} ${article.time}`,
-      });
-
     if (!dispatchedArticles.has(article.link)) {
+      const embeddedNews = new EmbedBuilder()
+        .setTitle(article.headline)
+        .setAuthor({
+          name: `${article.category || "Miscellaneous"}`,
+        })
+        .setImage(article.imageUrl)
+        //   .setThumbnail(article.imageUrl)
+        .setDescription(`${article.summary}\n@everyone`)
+        .setURL(article.link)
+        //   .setTimestamp(new Date().toISOString())
+        .setFooter({
+          text: `by ${article.author}\n${article.date} ${article.time}`,
+        });
       console.log(
         article.dateTime,
         article.date,

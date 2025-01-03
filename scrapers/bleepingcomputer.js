@@ -54,7 +54,7 @@ const scrapeNews = async (pageNumber = 1) => {
           dateTime: convertToDateTime(date, time),
         };
       })
-      .filter((item) => item.category !== "Deals");
+      .filter((item) => item.category && item.category !== "Deals");
 
     return articles.sort((a, b) => a.dateTime - b.dateTime);
   } catch (error) {

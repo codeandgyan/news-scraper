@@ -19,8 +19,14 @@ const client = new Client({
 
 const sendFeed = async () => {
   console.log(`${getFormattedDateTime()} >> `, "Polling for news feed...");
-  const channel = await client.channels.fetch(process.env.NEWS_FEED_CHANNEL_ID);
-  await sendNews(channel);
+  try {
+    const channel = await client.channels.fetch(
+      process.env.NEWS_FEED_CHANNEL_ID
+    );
+    await sendNews(channel);
+  } catch (error) {
+    console.error("Polling failed:", error.message);
+  }
 };
 
 client.once("ready", async () => {
