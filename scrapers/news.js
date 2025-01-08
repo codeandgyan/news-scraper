@@ -2,10 +2,11 @@ const { scrapeBleepingComputer } = require("./bleepingcomputer");
 const { EmbedBuilder } = require("discord.js");
 const { scrapeGBHackers } = require("./gbhackers");
 const { scrapeGenDigital } = require("./gendigital");
+const { scrapeForbes } = require("./forbes");
 
-const getSentMessages = async (channel, limit) => {
+const getSentMessages = async (channel, n) => {
   try {
-    const messages = await channel.messages.fetch({ limit: limit }); // Fetch the last 100 messages
+    const messages = await channel.messages.fetch({ limit: n }); // Fetch the last n messages
     const sentNews = messages.map((msg) => {
       return msg.embeds?.[0]?.url;
     });
@@ -19,13 +20,15 @@ const getSentMessages = async (channel, limit) => {
 async function sendNews(channel) {
   const bleepingcomputerArticles = await scrapeBleepingComputer(1);
   const gbhackersArticles = await scrapeGBHackers(1);
+  const forbes = await scrapeForbes();
   const gendigital = await scrapeGenDigital(1);
   const articles = [
     ...bleepingcomputerArticles,
     ...gbhackersArticles,
+    ...forbes,
     ...gendigital,
   ];
-  const dispatchedArticles = await getSentMessages(channel, 100);
+  const dispatchedArticles = await getSentMessages(channel, 300);
   for (const article of articles) {
     if (!dispatchedArticles.has(article.link)) {
       const embeddedNews = new EmbedBuilder()

@@ -1,6 +1,10 @@
 const axios = require("axios");
 const https = require("https");
-const { formatTextToUrl, getFormattedDateTime } = require("../common/utils");
+const {
+  formatTextToUrl,
+  getFormattedDateTime,
+  escapeSingleQuotes,
+} = require("../common/utils");
 require("dotenv").config();
 
 const githubToken = process.env.GITHUB_TOKEN; // Use Your GitHub token
@@ -103,11 +107,17 @@ async function addArticleToHomePage(
       "utf-8"
     );
 
-    const newContent = `| <span style='font-size: 1.25rem; line-height: normal'>🔖</span> | <a href='${articleUrl}' style='font-size: 1.25rem; line-height: normal'>${articleTitle}</a> |
+    const newContent = `| <span style='font-size: 1.25rem; line-height: normal'>🔖</span> | <a href='${articleUrl}' style='font-size: 1.25rem; line-height: normal'>${escapeSingleQuotes(
+      articleTitle
+    )}</a> |
 |-------|:-----------------------|
-|       | <img class='image' src='${imageUrl}' alt='${articleTitle}' width='300'> |
-|       | <span class='summary'>${summary}</span> |
-|       | <span class='publication' style='font-size: 0.938rem; opacity: 0.5; line-height: normal; font-weight: 500'><span class='author'>${author}</span><br><span class='date'>${dateTime}</span><br><span>• • •</span><br><em class='category' style='font-size: small'>Powered by AI</em><sup> ⚙️</sup></span>   |
+|       | <img class='image' src='${imageUrl}' alt='${escapeSingleQuotes(
+      articleTitle
+    )}' width='300' onerror="this.onerror=null; this.src='https://dwtyzx6upklss.cloudfront.net/Pictures/460x307/4/2/3/5423_cybersecurity_880937.png';"> |
+|       | <span class='summary'>${escapeSingleQuotes(summary)}</span> |
+|       | <span class='publication' style='font-size: 0.938rem; opacity: 0.5; line-height: normal; font-weight: 500'><span class='author'>${escapeSingleQuotes(
+      author
+    )}</span><br><span class='date'>${dateTime}</span><br><span>• • •</span><br><em class='category' style='font-size: small'>Powered by AI</em><sup> ⚙️</sup></span>   |
 
 ---
 

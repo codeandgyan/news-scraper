@@ -36,13 +36,6 @@ async function searchImageUrl(keyword) {
   return staticImageUrls[Math.floor(Math.random() * staticImageUrls.length)];
 }
 
-// // Example usage
-// (async () => {
-//   const keyword = "Steganography"; // Replace with dynamic user input if needed
-//   const imageUrl = await searchImageUrl(keyword);
-//   console.log(imageUrl);
-// })();
-
 module.exports = {
   searchImageUrl,
 };

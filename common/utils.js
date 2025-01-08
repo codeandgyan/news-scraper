@@ -1,4 +1,5 @@
 const { generateSlug } = require("random-word-slugs");
+const moment = require("moment");
 
 function convertToDateTime(dateString, timeString) {
   // Combine the date and time strings
@@ -46,12 +47,41 @@ function getFormattedDateTime() {
   return `${month} ${day}, ${year} ${hourIn12Format}:${minutes}:${seconds} ${ampm}`;
 }
 
+function parseDateFormats(input) {
+  // Try to parse the input as a relative time or an absolute date
+  let parsedTime;
+
+  // If the input is already in the format "MMM D, YYYY" (e.g., "Jan 6, 2025")
+  if (moment(input, "MMM D, YYYY", true).isValid()) {
+    parsedTime = moment(input, "MMM D, YYYY");
+  } else {
+    // Try to parse relative time inputs like "1 second ago", "3 minutes ago"
+    parsedTime = moment(input, true);
+  }
+
+  // Default to current date/time if the input is invalid
+  if (!parsedTime.isValid()) {
+    parsedTime = moment();
+  }
+
+  // Return the result in the specified formats
+  return {
+    date: parsedTime.format("MMM DD, YYYY"), // "Jan 04, 2025"
+    time: parsedTime.format("hh:mm A"), // "06:30 PM"
+    dateTime: parsedTime.toISOString(), // "2025-01-04T18:30:00.000Z"
+  };
+}
+
 function formatTextToUrl(text) {
   return text
     .toLowerCase() // Convert to lowercase
     .replace(/[^a-z0-9\s]/g, "-") // Replace any non-alphanumeric character (except space) with '-'
     .replace(/\s+/g, "-") // Replace spaces (one or more) with '-'
     .replace(/-+$/g, ""); // Remove trailing hyphens if any
+}
+
+function escapeSingleQuotes(str) {
+  return str.replace(/'/g, "&apos;");
 }
 
 // Function to validate the keyword
@@ -91,7 +121,9 @@ function getNewSlug(suffix) {
 module.exports = {
   convertToDateTime,
   getFormattedDateTime,
+  parseDateFormats,
   formatTextToUrl,
+  escapeSingleQuotes,
   isValidKeyword,
   getNewSlug,
 };
