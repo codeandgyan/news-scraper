@@ -28,7 +28,7 @@ async function sendNews(channel) {
     ...forbes,
     ...gendigital,
   ];
-  const dispatchedArticles = await getSentMessages(channel, 300);
+  const dispatchedArticles = await getSentMessages(channel, 100);
   for (const article of articles) {
     if (!dispatchedArticles.has(article.link)) {
       const embeddedNews = new EmbedBuilder()
