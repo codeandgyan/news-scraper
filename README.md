@@ -1,7 +1,7 @@
 # news-scraper
 
 Scrapes News from the world of Cyber Security, Hacking and related topics and sends the feed via a discord bot
-![image](https://github.com/user-attachments/assets/a3d3cb41-781d-4af0-9cb4-1709d29a05d0)
+![image](https://github.com/user-attachments/assets/b4052a8d-12f2-4fc2-9037-0d30187ebdad)
 
 # Steps to setup and run the app
 
@@ -55,6 +55,8 @@ Scrapes News from the world of Cyber Security, Hacking and related topics and se
 
 > Currently, this feature is not supported by _Cyber Security News Server_ Discord Server public.
 > However, you can host this feature on your own server from this source code if you have your own discord configurations.
+
+https://github.com/user-attachments/assets/780bff5a-59d8-409d-8950-115230eef552
 
 - Create a `#topic-list` channel whose channelID to be configured in `DISCORD_TOPIC_LIST_CHANNEL_ID` .env variable.
 - Ensure the discord app and bot you have created has necessary permissions to send messages, send reactions, etc.
