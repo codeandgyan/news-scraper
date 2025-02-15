@@ -1,7 +1,6 @@
 const { scrapeBleepingComputer } = require("./bleepingcomputer");
 const { EmbedBuilder } = require("discord.js");
 const { scrapeGBHackers } = require("./gbhackers");
-const { scrapeGenDigital } = require("./gendigital");
 const { scrapeForbes } = require("./forbes");
 
 const getSentMessages = async (channel, n) => {
@@ -21,12 +20,10 @@ async function sendNews(channel) {
   const bleepingcomputerArticles = await scrapeBleepingComputer(1);
   const gbhackersArticles = await scrapeGBHackers(1);
   const forbes = await scrapeForbes();
-  const gendigital = await scrapeGenDigital(1);
   const articles = [
     ...bleepingcomputerArticles,
     ...gbhackersArticles,
     ...forbes,
-    ...gendigital,
   ];
   const dispatchedArticles = await getSentMessages(channel, 100);
   for (const article of articles) {
