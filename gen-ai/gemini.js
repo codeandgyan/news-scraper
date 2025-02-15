@@ -3,7 +3,7 @@ require("dotenv").config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { searchImageUrl } = require("./image-url-lookup");
 const { generateSlug } = require("random-word-slugs");
-const { getFormattedDateTime, getNewSlug } = require("../common/utils");
+const { getFormattedDateTime, getNewSlug, escapeSingleQuotes } = require("../common/utils");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -31,7 +31,9 @@ async function generateMarkdownArticle(keyword) {
       1. # An intriguing title, up to 10 words.
       2. ***Author***: *${author}*\n
       3. ***Date***: *${dateTime}*\n
-      4. ![${keyword}](${imageUrl})
+      4. <img class='image' src='${imageUrl}' alt='${escapeSingleQuotes(
+      keyword
+    )}' onerror="this.onerror=null; this.src='https://dwtyzx6upklss.cloudfront.net/Pictures/460x307/4/2/3/5423_cybersecurity_880937.png';">
       5. ## Summary: 4-5 lines summarizing the article in around 25 words.
       6. ## Sections (up to N Sections) : A 3-5 minute read breaking down the concept with use cases, applications, a short case study, and any necessary details to trigger interest.
       Ensure the formatting is professional with paragraphs, bullet points, and other necessary elements.
