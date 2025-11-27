@@ -8,48 +8,18 @@ const scrapeNews = async (pageNumber = 1) => {
   try {
     const websiteUrl = pageNumber === 1 ? url : `${url}page/${pageNumber}/`;
 
-    let data;
-    const headers = {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-      "Accept-Language": "en-US,en;q=0.9",
-      Referer: url,
-      Connection: "keep-alive",
-      "Upgrade-Insecure-Requests": "1",
-    };
-    
-    const response = await axios.get(websiteUrl, {
-      headers,
-      timeout: 10000,
-      validateStatus: null,
+    const { data } = await axios.get(websiteUrl, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "Accept-Language": "en-US,en;q=0.9",
+        Referer: url,
+        Connection: "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+      },
     });
-
-    if (response.status === 403) {
-      console.warn("Received 403 from server — attempting Playwright fallback");
-
-      const fetchWithPlaywright = async (pageUrl) => {
-        const { chromium } = require("playwright-chromium");
-        const browser = await chromium.launch({
-          args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        });
-        const context = await browser.newContext({
-          userAgent: headers["User-Agent"],
-          locale: "en-US",
-        });
-        const page = await context.newPage();
-        await page.goto(pageUrl, { waitUntil: "networkidle", timeout: 30000 });
-        const html = await page.content();
-        await browser.close();
-        return html;
-      };
-
-      data = await fetchWithPlaywright(websiteUrl);
-    } else {
-      data = response.data;
-    }
-
     const $ = cheerio.load(data);
 
     const result = $("div[id='tdi_44']")?.[0]?.childNodes;
@@ -102,7 +72,7 @@ const scrapeNews = async (pageNumber = 1) => {
 
     return articles?.sort((a, b) => a.dateTime - b.dateTime) ?? [];
   } catch (error) {
-    console.error("Error scraping gbhackers:", error.message, error.data);
+    console.warn("Error scraping gbhackers:", error.message, error.data);
     return [];
   }
 };
