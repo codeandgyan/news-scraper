@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { convertToDateTime, getServerIp } = require("../common/utils");
+const { convertToDateTime, getServerIp, getRandomUserAgent, sleep } = require("../common/utils");
+const { scrapeGBHackersPuppeteer, initBrowser, closeBrowser } = require("./gbhackers_puppeteer");
 
 const url = "https://gbhackers.com/";
 
@@ -8,18 +9,50 @@ const scrapeNews = async (pageNumber = 1) => {
   try {
     const websiteUrl = pageNumber === 1 ? url : `${url}page/${pageNumber}/`;
 
-    const { data } = await axios.get(websiteUrl, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-        "Accept-Language": "en-US,en;q=0.9",
-        Referer: url,
-        Connection: "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-      },
-    });
+    // Try initial fetch with axios using random UA and simple headers. If blocked, fall back to puppeteer.
+    const maxAttempts = 3;
+    let data = null;
+    let lastErr = null;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const headers = {
+          "User-Agent": getRandomUserAgent(),
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+          "Accept-Language": "en-US,en;q=0.9",
+          Referer: url,
+          Connection: "keep-alive",
+        };
+
+        const resp = await axios.get(websiteUrl, { headers, timeout: 15000 });
+        if (resp && resp.status === 200 && resp.data) {
+          data = resp.data;
+          break;
+        }
+        lastErr = new Error(`Unexpected status ${resp.status}`);
+      } catch (err) {
+        lastErr = err;
+        // If 403, break and try puppeteer immediately
+        if (err.response && err.response.status === 403) break;
+        // randomized backoff before next attempt
+        await sleep(500 + Math.floor(Math.random() * 1000));
+      }
+    }
+
+    // If axios failed or returned 403, fallback to puppeteer (reuse browser)
+    if (!data) {
+      try {
+        await initBrowser({ headless: true });
+        const html = await scrapeGBHackersPuppeteer(pageNumber, { reuseBrowser: true, postLoadWait: 700 });
+        data = html;
+      } catch (err) {
+        // final failure, log and return empty
+        const serverIp = typeof getServerIp === "function" ? getServerIp() : "unknown";
+        console.warn("Error scraping gbhackers (puppeteer fallback failed):", lastErr?.message || err.message, { serverIp });
+        try { await closeBrowser(); } catch (e) {}
+        return [];
+      }
+    }
     const $ = cheerio.load(data);
 
     const result = $("div[id='tdi_44']")?.[0]?.childNodes;
