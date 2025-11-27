@@ -16,10 +16,10 @@ const scrapeNews = async (pageNumber = 1) => {
     });
     const $ = cheerio.load(data);
 
-    const result = $("div[id='tdi_45']")[0].childNodes;
+    const result = $("div[id='tdi_44']")?.[0]?.childNodes;
 
     const articles = result
-      .filter((e) => e.name === "div")
+      ?.filter((e) => e.name === "div")
       .map((element) => {
         const category = "Security";
 
@@ -64,7 +64,7 @@ const scrapeNews = async (pageNumber = 1) => {
         };
       });
 
-    return articles.sort((a, b) => a.dateTime - b.dateTime);
+    return articles?.sort((a, b) => a.dateTime - b.dateTime) ?? [];
   } catch (error) {
     console.error("Error scraping gbhackers:", error.message, error.data);
     return [];
