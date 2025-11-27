@@ -1,6 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { convertToDateTime } = require("../common/utils");
+const { convertToDateTime, getServerIp } = require("../common/utils");
 
 const url = "https://gbhackers.com/";
 
@@ -72,7 +72,10 @@ const scrapeNews = async (pageNumber = 1) => {
 
     return articles?.sort((a, b) => a.dateTime - b.dateTime) ?? [];
   } catch (error) {
-    console.warn("Error scraping gbhackers:", error.message, error.data);
+  // include server IP from shared utils (best-effort)
+  const serverIp = typeof getServerIp === "function" ? getServerIp() : "unknown";
+
+  console.warn("Error scraping gbhackers:", error.message, error.data, { serverIp });
     return [];
   }
 };

@@ -1,5 +1,6 @@
 const { generateSlug } = require("random-word-slugs");
 const moment = require("moment");
+const os = require("os");
 
 function convertToDateTime(dateString, timeString) {
   // Combine the date and time strings
@@ -118,6 +119,26 @@ function getNewSlug(suffix) {
   return suffix ? `${slug} ${suffix}` : slug;
 }
 
+// Return the first non-internal IPv4 address or 'unknown'
+function getServerIp() {
+  let serverIp = "unknown";
+  try {
+    const ifaces = os.networkInterfaces();
+    for (const name of Object.keys(ifaces)) {
+      for (const iface of ifaces[name]) {
+        if (iface.family === "IPv4" && !iface.internal) {
+          serverIp = iface.address;
+          break;
+        }
+      }
+      if (serverIp !== "unknown") break;
+    }
+  } catch (e) {
+    // keep 'unknown'
+  }
+  return serverIp;
+}
+
 module.exports = {
   convertToDateTime,
   getFormattedDateTime,
@@ -126,4 +147,5 @@ module.exports = {
   escapeSingleQuotes,
   isValidKeyword,
   getNewSlug,
+  getServerIp,
 };
